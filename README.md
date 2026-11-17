@@ -137,7 +137,7 @@ The original game uses a **vertical (portrait) display**, with a **256×240** vi
 
 The **Rotate screen 90** setting allows play on a horizontally mounted display. The MiSTer2MEGA65 framework also provides HDMI, CRT-emulation and compatible analogue / 15 kHz video settings through the on-screen menu.
 
-Audio uses **two AY-3-8910-compatible sound generators** implemented with Coin-Op Collection's `x8910` modules, together with **DAC sample audio**. The outputs are combined using the **JTFRAME audio mixer**.
+Audio uses **two AY-3-8910-compatible sound generators** together with **DAC sample audio**. The outputs are combined using the **JTFRAME audio mixer**.
 
 ## Upstream projects and components
 
