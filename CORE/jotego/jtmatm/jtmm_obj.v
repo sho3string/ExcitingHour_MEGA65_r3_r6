@@ -129,7 +129,10 @@ module jtmm_obj (
     wire [7:0] spr_x    = shd_x   [sprite_index];
 
     wire [7:0] sprite_sy = 8'd240 - spr_y;
-    wire [7:0] sprite_dy = line_y - sprite_sy;
+    // MAME: y = (240 - spriteram[offs+2]) & 0xff, then the 16-row sprite is
+    // clipped at the bitmap edge - it does NOT wrap back to row 0. A 9-bit
+    // subtract keeps "line above the sprite top" from aliasing to dy < 16.
+    wire [8:0] sprite_dy = {1'b0, line_y} - {1'b0, sprite_sy};
     wire [11:0] raw_sprite_code = {spr_attr[7:4], spr_code};
     wire [11:0] bounded_sprite_code =
         (raw_sprite_code >= 12'd3584) ? (raw_sprite_code - 12'd3584) : raw_sprite_code;
@@ -182,7 +185,7 @@ module jtmm_obj (
                 NEXT: begin
                     if (sprite_index >= 5'd24) begin
                         state <= IDLE;
-                    end else if (spr_attr[0] && sprite_dy < 8'd16) begin
+                    end else if (spr_attr[0] && sprite_dy < 9'd16) begin
                         sprite_code    <= bounded_sprite_code;
                         sprite_row     <= spr_attr[1] ? (4'd15 - sprite_dy[3:0]) : sprite_dy[3:0];
                         sprite_sx_byte <= spr_x;
